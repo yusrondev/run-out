@@ -30,6 +30,9 @@ const maxEnergy = 100;
 const energyCost = 20;
 let energy = maxEnergy;
 
+let gameTimeLeft = 30; // detik
+let gameTimerActive = false;
+
 // Pickup
 let pickups = [];
 const pickupRadius = 20; // ukuran lingkaran pickup
@@ -213,7 +216,9 @@ function updateSkillButton() {
   if (remaining > 0 || energy < energyCost) {
     skillBtn.disabled = true;
     skillBtn.innerHTML =
-      energy < energyCost ? "<img src='/assets/broken-sword.png'>" : `${Math.ceil(remaining / 1000)}s`;
+      energy < energyCost
+        ? "<img src='/assets/broken-sword.png'>"
+        : `${Math.ceil(remaining / 1000)}s`;
     skillBtn.style.opacity = 0.5;
   } else {
     skillBtn.disabled = false;
@@ -283,6 +288,33 @@ socket.on("currentPlayers", (data) => {
       players[socket.id].energy = energy;
     }
   }
+});
+
+socket.on("startCountdown", (data) => {
+  gameTimeLeft = data.timeLeft;
+  gameTimerActive = true;
+});
+
+socket.on("updateCountdown", (data) => {
+  gameTimeLeft = data.timeLeft;
+});
+
+socket.on("gameOver", (data) => {
+  const gameOverScreen = document.getElementById("gameOverScreen");
+  const gameOverMessage = document.getElementById("gameOverMessage");
+
+  if (data.winner === "attacker") {
+    gameOverMessage.innerText = "Attacker menang!";
+  } else {
+    gameOverMessage.innerText = "Attacker kalah! Defender bertahan 30 detik!";
+  }
+
+  gameOverScreen.style.display = "flex";
+
+  const restartBtn = document.getElementById("restartBtn");
+  restartBtn.onclick = () => {
+    window.location.reload();
+  };
 });
 
 socket.on("shieldActivated", (data) => {
@@ -625,6 +657,16 @@ function draw() {
     ctx.font = "12px Arial";
     ctx.textAlign = "center";
     ctx.fillText(p.name || p.role, p.x + 15, p.y - 15);
+  }
+
+  if (gameTimerActive) {
+    ctx.save();
+    ctx.resetTransform(); // agar tidak terpengaruh camera zoom/translate
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "30px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(`Time Left: ${gameTimeLeft}s`, canvas.width / 2, 50);
+    ctx.restore();
   }
 
   ctx.restore();

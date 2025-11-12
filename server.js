@@ -12,6 +12,9 @@ const pickupRespawnTime = 5000;
 const WORLD_WIDTH = 1800;
 const WORLD_HEIGHT = 1000;
 
+let gameTimer = null;
+let gameDuration = 30 * 1000; // 30 detik
+
 function spawnPickup() {
   const type = Math.random() < 0.5 ? "energy" : "hp";
   const x = Math.random() * (WORLD_WIDTH - pickupRadius * 2) + pickupRadius;
@@ -20,6 +23,29 @@ function spawnPickup() {
   const pickup = { id: Date.now() + Math.random(), x, y, type };
   pickups.push(pickup);
   io.emit("pickupSpawned", pickup);
+}
+
+function startGameCountdown() {
+  if (gameTimer) clearTimeout(gameTimer);
+
+  let timeLeft = gameDuration / 1000; // 30 detik
+  io.emit("startCountdown", { timeLeft }); // beri tahu client
+  gameTimerActive = true;
+
+  gameTimer = setInterval(() => {
+    timeLeft--;
+    io.emit("updateCountdown", { timeLeft });
+    if (timeLeft <= 0) {
+      clearInterval(gameTimer);
+      gameTimerActive = false;
+
+      // Cek apakah defender masih hidup
+      const defender = Object.values(players).find((p) => p.role === "defender");
+      if (defender && defender.hp > 0) {
+        io.emit("gameOver", { winner: "defender" });
+      }
+    }
+  }, 1000);
 }
 
 // Spawn pickup awal
@@ -155,7 +181,6 @@ io.on("connection", (socket) => {
   socket.on("useSkill", (data) => {
     const { x, y, radius, damage } = data;
 
-    // hit semua defender dalam radius
     for (let id in players) {
       const p = players[id];
       if (p.role === "defender") {
@@ -165,11 +190,16 @@ io.on("connection", (socket) => {
         if (dist <= radius) {
           p.hp = Math.max(0, p.hp - damage);
           io.to(id).emit("hitBySkill", { hp: p.hp });
+
+          // cek apakah defender mati
+          if (p.hp <= 0) {
+            io.emit("gameOver", { winner: "attacker" }); // attacker menang
+            if (gameTimer) clearTimeout(gameTimer); // stop timer
+          }
         }
       }
     }
 
-    // broadcast skill effect ke semua client agar partikel bisa ditampilkan
     io.emit("skillEffect", { x, y });
   });
 
@@ -186,11 +216,22 @@ io.on("connection", (socket) => {
   socket.on("setRole", (data) => {
     if (players[socket.id]) {
       players[socket.id].role = data.role;
-      players[socket.id].name = data.name || data.role; // simpan nama
+      players[socket.id].name = data.name || data.role;
       io.emit("roleUpdated", {
         newAttackerId: data.role === "attacker" ? socket.id : null,
         newDefenderId: data.role === "defender" ? socket.id : null,
       });
+
+      // Start countdown jika role sudah lengkap
+      const attackerExists = Object.values(players).some(
+        (p) => p.role === "attacker"
+      );
+      const defenderExists = Object.values(players).some(
+        (p) => p.role === "defender"
+      );
+      if (attackerExists && defenderExists) {
+        startGameCountdown();
+      }
     }
   });
 });
