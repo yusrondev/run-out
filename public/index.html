@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Game Kejar-Kejaran</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- HTML -->
+    <div id="joystick-container"></div>
+
+    <button id="roleAttacker">Jadi Penyerang</button>
+    <button id="roleDefender">Jadi Bertahan</button>
+
+    <!-- Skill button hanya untuk attacker -->
+    <button id="skillBtn">Skill Damage</button>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.9.0/dist/nipplejs.min.js"></script>
+    <script src="client.js"></script>
+</body>
+
+</html>

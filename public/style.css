@@ -1,0 +1,54 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: #222;
+}
+
+canvas {
+    display: block;
+    background-color: #eee;
+    border: 2px solid #000;
+}
+
+#joystick-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 120px;
+    height: 120px;
+    z-index: 9999;
+}
+
+#skillBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 50px; /* jauh dari joystick */
+    z-index: 10000;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #ff4500;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    touch-action: manipulation; /* penting untuk mobile */
+    pointer-events: auto;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#skillBtn img {
+    width: 40px;
+    height: 40px;
+}
+
+#skillBtn:active {
+    transform: scale(0.9);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+}
