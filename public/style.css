@@ -1,17 +1,68 @@
 html,
+/* BODY */
 body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    background-color: #222;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #111; /* gelap sederhana */
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-canvas {
-    display: block;
-    background-color: #eee;
-    border: 2px solid #000;
+/* LOBBY CONTAINER */
+#lobby {
+  text-align: center;
+  background: #222;
+  padding: 25px 20px;
+  border-radius: 15px;
+}
+
+/* LOBBY TITLE */
+#lobby h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* BUTTON LOBBY */
+#lobby button {
+  display: block;
+  width: 300px;
+  margin: 10px auto;
+  padding: 12px 0;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.2s;
+}
+
+#lobby button:hover {
+  transform: scale(1.05);
+}
+
+/* BUTTON COLORS */
+#roleAttacker {
+  background-color: #e74c3c; /* merah */
+}
+
+#roleDefender {
+  background-color: #1a38bc; /* biru kehijauan */
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  #lobby h2 {
+    font-size: 20px;
+  }
+  #lobby button {
+    font-size: 16px;
+    padding: 10px 0;
+  }
 }
 
 #joystick-container {
@@ -26,14 +77,63 @@ canvas {
 #skillBtn {
     position: fixed;
     right: 20px;
-    bottom: 50px; /* jauh dari joystick */
+    bottom: 100px; /* jauh dari joystick */
     z-index: 10000;
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    background-color: #ff4500;
+    background-color: #ff4400a1;
     border: none;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    touch-action: manipulation; /* penting untuk mobile */
+    pointer-events: auto;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#speedBtn {
+    position: fixed;
+    right: 70px;
+    bottom: 10px; /* jauh dari joystick */
+    z-index: 10000;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #f7b731;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    touch-action: manipulation; /* penting untuk mobile */
+    pointer-events: auto;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#shieldBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 100px; /* jauh dari joystick */
+    z-index: 10000;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #4b7bec;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,7 +148,24 @@ canvas {
     height: 40px;
 }
 
+#speedBtn img {
+    width: 40px;
+    height: 40px;
+}
+
+#shieldBtn img {
+    width: 40px;
+    height: 40px;
+}
+
 #skillBtn:active {
     transform: scale(0.9);
     box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+}
+
+#gameCanvas {
+    width: 100vw; /* tampilkan full layar lebar */
+    height: 100vh; /* tampilkan full layar tinggi */
+    display: block;
+    margin: 0;
 }

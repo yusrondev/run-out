@@ -1,28 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Game Kejar-Kejaran</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="style.css">
-</head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-    <!-- HTML -->
-    <div id="joystick-container"></div>
+  <body>
+    <!-- Lobby awal -->
+    <div id="lobby">
+      <h2>Pilih Role</h2>
 
-    <button id="roleAttacker">Jadi Penyerang</button>
-    <button id="roleDefender">Jadi Bertahan</button>
+      <!-- Input Nama -->
+      <input
+        type="text"
+        id="playerName"
+        placeholder="Masukkan nama kamu"
+        maxlength="12"
+        style="
+          width: 80%;
+          padding: 8px;
+          margin-bottom: 15px;
+          border-radius: 8px;
+          border: none;
+          font-size: 16px;
+          text-align: center;
+        "
+      />
 
-    <!-- Skill button hanya untuk attacker -->
-    <button id="skillBtn">Skill Damage</button>
+      <!-- Tombol Role -->
+      <button id="roleAttacker">Jadi Penyerang</button>
+      <button id="roleDefender">Jadi Bertahan</button>
+    </div>
 
-    <canvas id="gameCanvas"></canvas>
+    <!-- Game UI, hidden awalnya -->
+    <div id="gameUI" style="display: none">
+      <canvas
+        id="minimapCanvas"
+        width="150"
+        height="80"
+        style="
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          border: 2px solid #ffffff6e;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+        "
+      ></canvas>
+
+      <div id="joystick-container"></div>
+
+      <button id="skillBtn" style="display: none">Skill Damage</button>
+      <button id="speedBtn">Double Speed</button>
+      <button id="shieldBtn" style="display: none">Shield</button>
+
+      <canvas id="gameCanvas"></canvas>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.9.0/dist/nipplejs.min.js"></script>
     <script src="client.js"></script>
-</body>
-
+  </body>
 </html>
